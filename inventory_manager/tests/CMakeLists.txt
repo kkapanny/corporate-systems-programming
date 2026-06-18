@@ -1,12 +1,13 @@
 include(FetchContent)
 
 FetchContent_Declare(
-    googletest
-    URL https://github.com/google/googletest/archive/refs/tags/v1.14.0.zip
-    DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+    Catch2
+    GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+    GIT_TAG v3.7.1
 )
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(googletest)
+FetchContent_MakeAvailable(Catch2)
+
+list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
 
 set(TESTS_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 
@@ -23,11 +24,12 @@ target_include_directories(warehouse_unit_tests PRIVATE "${TESTS_INCLUDE_DIR}")
 target_link_libraries(warehouse_unit_tests
     PRIVATE
     warehouse_lib
-    GTest::gtest_main
+    Catch2::Catch2WithMain
 )
 
-include(GoogleTest)
-gtest_discover_tests(warehouse_unit_tests)
+include(CTest)
+include(Catch)
+catch_discover_tests(warehouse_unit_tests)
 
 function(add_scenario_executable target_name source_file)
     add_executable(${target_name} ${source_file})

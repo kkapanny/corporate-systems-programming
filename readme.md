@@ -1,28 +1,29 @@
-сборка:
+## Локальная сборка
 
 ```bash
 cmake -S . -B build
 cmake --build build
 ```
 
-запуск:
+Запуск приложения:
 
 ```bash
-cd build
-./warehouse
+./build/warehouse
 ```
 
+## Тесты
 
-
-сборка и запуск тестов:
-
-```cmake -S . -B build
+```bash
+# сборка
+cmake -S . -B build
 cmake --build build
 
-# unit-тесты
+# test
+ctest --test-dir build --output-on-failure
+# or
 ./build/tests/warehouse_unit_tests
 
-# сценарии по отдельности
+# сценарии
 ./build/tests/scenario_01_add_product
 ./build/tests/scenario_02_list_products
 ./build/tests/scenario_03_income_flow
@@ -30,5 +31,19 @@ cmake --build build
 ./build/tests/scenario_05_replenishment_draft
 ./build/tests/scenario_06_full_cycle
 ./build/tests/scenario_07_error_handling
+```
+
+## Docker
+
+```bash
+docker build -t warehouse-mgmt:latest . # сборка
+```
+
+```bash
+`docker run -it warehouse-mgmt:latest`              # запуск приложения 
+  
+docker run --rm warehouse-mgmt:latest test          # Unit-тесты   
+docker run --rm warehouse-mgmt:latest scenarios     # все 7 сценарных тестов  
+docker run --rm warehouse-mgmt:latest scenario 03   # один сценарий   
 ```
 
